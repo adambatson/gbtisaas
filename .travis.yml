@@ -7,8 +7,6 @@ services:
 
 before_install:
   - mysql -e 'CREATE DATABASE gbtisaas_test;'
-  - mysql -e 'CREATE USER 'gbtis'@';'
-  - mysql -e 'grant all privileges on gbtisaas_test to gbtis@'%';'
 
 install: "bundle install"
 
