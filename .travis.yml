@@ -1,7 +1,21 @@
 language: ruby
 rvm:
   - 2.3.3
+
+services:
+  - mysql
+
+test:
+  adapter: mysql2
+  database: myapp_test
+  username: travis
+  encoding: utf8
+
+before_install:
+  - mysql -e 'CREATE DATABASE gbtisaas_test;'
+
 install: "bundle install"
+
 script:
   - rails db:migrate RAILS_ENV=test
   - rails test
