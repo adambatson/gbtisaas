@@ -10,5 +10,14 @@
   <%= @guestbook.active %>
 </p>
 
+<p>
+  <strong>Messages:</strong>
+  <ul>
+    <% @guestbook.messages.each do |msg| %>
+      <li><%= msg.content %></li>
+    <% end %>
+  </ul>
+</p>
+
 <%= link_to 'Edit', edit_guestbook_path(@guestbook) %> |
 <%= link_to 'Back', guestbooks_path %>
