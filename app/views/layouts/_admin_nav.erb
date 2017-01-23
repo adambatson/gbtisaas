@@ -1,0 +1,17 @@
+<ul class="nav navbar-nav">
+  <%= draw_nav("Manage Guestbooks", "", nil, nil) -%>
+  <%= draw_nav("Manage Signatures", "", nil, nil) -%>
+  <%= draw_nav("Manage Remote Access", "", nil, nil) -%>
+  <%= draw_nav("Manage Accounts", "", nil, nil) -%>
+</ul>
+
+<!-- Account settings -->
+<ul class="nav navbar-nav navbar-right">
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Logged in as #NAME# <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="#">Log out</a></li>
+    </ul>
+  </li>
+</ul>
