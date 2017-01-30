@@ -69,6 +69,6 @@ class GuestbooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def guestbook_params
-      params.require(:guestbook).permit(:title, :active)
+      params.require(:guestbook).permit(:title, :archived)
     end
 end

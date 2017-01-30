@@ -2,12 +2,12 @@
 
 one:
   title: Gala
-  active: false
+  archived: false
 
 two:
   title: Gala2
-  active: false
+  archived: false
 
 duplicate_title:
   title: Gala
-  active: true
+  archived: true

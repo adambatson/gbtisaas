@@ -17,7 +17,7 @@ class GuestbooksControllerTest < ActionDispatch::IntegrationTest
 
   test "should create guestbook" do
     assert_difference('Guestbook.count') do
-      post guestbooks_url, params: { guestbook: { active: false, title: "Some title" } }
+      post guestbooks_url, params: { guestbook: { archived: false, title: "Some title" } }
     end
 
     assert_redirected_to guestbook_url(Guestbook.last)
@@ -34,7 +34,7 @@ class GuestbooksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update guestbook" do
-    patch guestbook_url(@guestbook), params: { guestbook: { active: true, title: "New title" } }
+    patch guestbook_url(@guestbook), params: { guestbook: { archived: true, title: "New title" } }
     assert_redirected_to guestbook_url(@guestbook)
   end
 
