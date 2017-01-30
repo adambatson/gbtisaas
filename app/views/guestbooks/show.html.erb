@@ -14,7 +14,9 @@
   <strong>Messages:</strong>
   <ul>
     <% @guestbook.messages.each do |msg| %>
-      <li><%= msg.content %></li>
+      <% if msg.approved %>
+        <li><%= msg.content %></li>
+      <% end %>
     <% end %>
   </ul>
 </p>
