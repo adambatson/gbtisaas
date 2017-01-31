@@ -3,9 +3,9 @@
 one:
   content: MyText
   approved: false
-  guestbook: one
+  guestbook: guestbook_one
 
 two:
   content: MyText
   approved: false
-  guestbook: one
+  guestbook: guestbook_one

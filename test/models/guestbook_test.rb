@@ -8,7 +8,7 @@ class GuestbookTest < ActiveSupport::TestCase
   end
 
   test "guestbook titles must be unique" do
-    guestbooks(:one).save
+    guestbooks(:guestbook_one).save
     assert_not guestbooks(:duplicate_title).save
   end
 

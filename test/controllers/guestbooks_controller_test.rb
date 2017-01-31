@@ -2,7 +2,7 @@ require 'test_helper'
 
 class GuestbooksControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @guestbook = guestbooks(:one)
+    @guestbook = guestbooks(:guestbook_one)
   end
 
   test "should get index" do
