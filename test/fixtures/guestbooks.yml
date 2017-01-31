@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+guestbook_one:
+  title: Gala
+  archived: false
+
+guestbook_two:
+  title: Gala2
+  archived: false
+
+duplicate_title:
+  title: Gala
+  archived: true
