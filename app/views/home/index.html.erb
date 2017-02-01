@@ -1,0 +1,50 @@
+
+      <div class="page-header">
+        <h1><%= @current_book.title %> <small>Ongoing</small></h1>
+      </div>  
+
+      <ul class="list-group">
+        <li class="list-group-item">
+          <form class="form-inline">
+            <div class="form-group">
+              <input type="text" id="filter" class="form-control" placeholder="Filter Results" />
+            </div>
+
+            <div class="responsive-right">
+              <div class="btn-group">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Sort Results By
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li class="primary"><a href="#">Most Recent</a></li>
+                  <li><a href="#">Most Popular</a></li>
+                  <li><a href="#">Most Controversial</a></li>
+                </ul>
+              </div>
+            </span>
+          </form>
+        </li>
+
+        <% @messages.each do |message| %>
+          <li class="list-group-item">
+            <%= message.content %> <small class="text-muted"><% if @current_book.archived %> Ongoing <% else %> <%= time_ago_in_words(message.created_at) %> ago <% end %></small>
+            <span class="pull-right">
+              <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                <div class="btn btn-default" aria-label="...">
+                  <span class="glyphicon glyphicon-thumbs-up"></span>
+                </div>
+
+                <div class="btn btn-default" aria-label="...">
+                  <span class="text-danger">0</span>
+                </div>
+
+                <div class="btn btn-default" aria-label="...">
+                  <span class="glyphicon glyphicon-thumbs-down"></span>
+                </div>
+              </div>
+            </span>
+          </li>
+        <% end %>
+      </ul>

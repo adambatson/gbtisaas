@@ -6,14 +6,16 @@
     
     <ul class="dropdown-menu">
       <!-- Ongoing events -->
-      <li><a href="#">Test Gala <small class="text-muted">Ongoing</small></a></li>
+      <% @active_books.each do |book| %>
+        <li><a href="#"><%= book.title %> <small class="text-muted">Ongoing</small></a></li>
+      <% end %>
 
       <li role="separator" class="divider"></li>
 
       <!-- Closed events -->
-      <li><a href="#">Experimental Ball <small class="text-muted">3 weeks ago</small></a></li>
-      <li><a href="#">Trial Party <small class="text-muted">June 2016</small></a></li>
-      <li><a href="#">Testcase Triathalon <small class="text-muted">May 2016</small></a></li>
+      <% @archived_books.each do |book| %>
+        <li><a href="#"><%= book.title %> <small class="text-muted"><%= time_ago_in_words(book.created_at) %> ago</small></a></li>
+      <% end %>
     </ul>
   </li>
 </ul>
