@@ -1,5 +1,5 @@
 class MessagesController < ApplicationController
-  before_action :set_message, only: [:show, :edit, :update, :destroy]
+  before_action :set_message, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
 
   # GET /messages
   # GET /messages.json
@@ -61,6 +61,26 @@ class MessagesController < ApplicationController
     end
   end
 
+  def upvote
+    #abort cookies.inspect
+    if (cookies[:last_vote] != "up" or cookies[:last_vote].blank?)
+      @message.cast_vote true
+      cookies[:last_vote] = {:value => "up"}
+      #respond_to do |format|
+        #format.js { render :json => {"res": @message.votes }}
+      #  format.js {}
+      #end
+      render json: {:message => @message}
+    end
+  end
+
+  def downvote
+    if (cookies[:last_vote] != "down" or cookies[:last_vote].blank?)
+      @message.cast_vote false
+      cookies[:last_vote] = "down"
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_message
@@ -69,6 +89,6 @@ class MessagesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def message_params
-      params.require(:message).permit(:content, :approved, :guestbook_id)
+      params.require(:message).permit(:content, :approved, :guestbook_id, :votes)
     end
 end
