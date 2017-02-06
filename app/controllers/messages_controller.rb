@@ -62,16 +62,11 @@ class MessagesController < ApplicationController
   end
 
   def upvote
-    #abort cookies.inspect
     if (cookies[:last_vote] != "up" or cookies[:last_vote].blank?)
       @message.cast_vote true
       cookies[:last_vote] = {:value => "up"}
-      #respond_to do |format|
-        #format.js { render :json => {"res": @message.votes }}
-      #  format.js {}
-      #end
-      render json: {:message => @message}
     end
+    render json: {:votes => @message.votes}
   end
 
   def downvote
@@ -79,6 +74,7 @@ class MessagesController < ApplicationController
       @message.cast_vote false
       cookies[:last_vote] = "down"
     end
+    render json: {:votes => @message.votes}
   end
 
   private
