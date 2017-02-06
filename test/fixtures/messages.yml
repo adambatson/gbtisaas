@@ -4,8 +4,10 @@ one:
   content: MyText
   approved: false
   guestbook: guestbook_one
+  votes: 0
 
 two:
   content: MyText
   approved: false
   guestbook: guestbook_one
+  votes: 0
