@@ -61,6 +61,15 @@ class GuestbooksController < ApplicationController
     end
   end
 
+  def set_default
+    Guestbook.where("is_default=true").each do |book|
+      book.toggle_default
+    end
+    default = Guestbook.find(params[:id])
+    default.toggle_default
+    render json: {:guestbook => default}
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_guestbook

@@ -9,4 +9,13 @@ class Guestbook < ApplicationRecord
     self.messages.select(&l)
   end
 
+  def toggle_default
+    self.is_default = !self.is_default
+    self.save
+  end
+
+  def self.get_default
+    Guestbook.where("is_default=true")
+  end
+
 end
