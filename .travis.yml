@@ -13,3 +13,9 @@ install: "bundle install"
 script:
   - rails db:migrate RAILS_ENV=test
   - rails test
+
+deploy:
+ provider: heroku
+ api-key:
+  secure: $HEROKU_API_KEY
+ app: gbtisaas
