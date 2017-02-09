@@ -62,14 +62,12 @@ class GuestbooksController < ApplicationController
   end
 
   def set_default
-    old = Guestbook.where("is_default=true")
-    old.each do |book|
+    Guestbook.where("is_default=true").each do |book|
       book.toggle_default
     end
     default = Guestbook.find(params[:id])
     default.toggle_default
-    #abort default.inspect
-    render json: {:is_default => Guestbook.find(params[:id]).is_default}
+    render json: {:guestbook => default}
   end
 
   private
