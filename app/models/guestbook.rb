@@ -14,4 +14,8 @@ class Guestbook < ApplicationRecord
     self.save
   end
 
+  def self.get_default
+    Guestbook.where("is_default=true")
+  end
+
 end
