@@ -19,6 +19,8 @@ class GuestbooksController < ApplicationController
       @messages = Message.where('guestbook_id = ' + params[:id]).order('votes DESC')
     when 'alphabet'
       @messages = Message.where('guestbook_id = ' + params[:id]).order('content ASC')
+    when 'controversial'
+      @messages = Message.where('guestbook_id = ' + params[:id]).order('(votes_cast - votes) DESC')
     else
       @messages = Message.where('guestbook_id = ' + params[:id])
     end
