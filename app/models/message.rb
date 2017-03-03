@@ -11,4 +11,9 @@ class Message < ApplicationRecord
     end
   end
 
+  def cast_vote up
+    self.votes += up ? 1 : -1
+    self.save
+  end
+
 end

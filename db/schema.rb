@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170130155350) do
+ActiveRecord::Schema.define(version: 20170209185430) do
 
   create_table "guestbooks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title"
     t.boolean  "archived"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.boolean  "is_default",                default: false
+    t.text     "description", limit: 65535
   end
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -25,6 +27,7 @@ ActiveRecord::Schema.define(version: 20170130155350) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "guestbook_id"
+    t.integer  "votes"
     t.index ["guestbook_id"], name: "index_messages_on_guestbook_id", using: :btree
   end
 
