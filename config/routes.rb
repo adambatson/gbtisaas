@@ -16,4 +16,10 @@ Rails.application.routes.draw do
 
   root 'home#index'
   get 'about', to: 'home#about'
+
+  get 'admin', to: 'admin#guestbooks'
+  get 'admin/guestbooks'
+  get 'admin/signatures'
+  get 'admin/access'
+  get 'admin/accounts'
 end

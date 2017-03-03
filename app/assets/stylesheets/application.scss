@@ -15,3 +15,85 @@
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+.navbar {
+	border-radius: 0px;
+}
+
+.pointer-cursor {
+	cursor:pointer;
+}
+
+.form-panel-title {
+	margin-top: 8px;
+}
+
+.divider-row {
+	border-bottom: 5px solid #DDD;
+}
+
+	.divider-row td {
+		padding: 0 !important;
+	}
+
+.table-tool th:last-child, .table-tool td:last-child {
+    text-align: right;
+}
+
+	.table-tool .text-center {
+		text-align: center !important;
+	}
+
+.btn-heading {
+	margin-top: -3px;
+	margin-right: -7px;
+	float: right;
+}
+
+.responsive-right {
+	text-align: right;
+}
+
+.form-horizontal .btn-group {
+	margin-top: 10px;
+}
+
+.jumbotron {
+	padding: 0 !important;
+}
+
+.jumbotron .list-group-item p {
+	font-size: 14px;
+}
+
+@media (min-width: 768px) {
+	.responsive-right {
+		float: right !important;
+	}
+}
+ 
+@media (min-width: 992px) {
+	.form-horizontal .btn-group {
+		margin-top: 0px;
+	}
+}
+
+footer {
+	border-top: 1px solid #DDD;
+	font-style: italic;
+	text-align: right;
+	color: #555;
+	padding: 5px;
+}
+
+button span {
+	position: relative; 
+	bottom: 1px;
+
+	padding-left: 2px;
+}
+
+td .btn-group {
+	display: flex;
+	float: right;
+}

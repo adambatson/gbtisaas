@@ -1,0 +1,106 @@
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">GBTIS</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="books.html">Manage Guestbooks <span class="sr-only">(current)</span></a></li>
+        <li><a href="names.html">Manage Signatures</a></li>
+        <li><a href="remote.html">Manage Remote Access</a></li>
+        <li><a href="accounts.html">Manage Accounts</a></li>
+      </ul>
+
+      <!-- Account settings -->
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Logged in as #NAME# <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="#">Log out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Manage Guestbooks</h1>
+  </div>  
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form>
+        <div class="input-group">
+          <label class="control-label sr-only" for="bookAdd">bookAdd</label>
+          <input type="text" class="form-control" id="bookAdd" placeholder="Name">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">New Guestbook</button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="table-responsive">
+      <table class="table table-tool table-striped" style="border-collapse: collapse;">
+        <tr>
+          <th>Default</th>
+          <th>Name</th>
+          <th>Opened</th>
+          <th>Archived</th>
+          <th>Actions</th>
+        </tr>
+
+        <% @open_books.each do |guestbook| %>
+        <tr>
+          <td><input type="radio" name="default" <% if guestbook.is_default %> checked="" <% end %> onclick="defaultBook(<%= guestbook.id %>)" /></td>
+          <td><%= guestbook.title %></td>
+          <td><%= time_tag guestbook.created_at.to_date %></td>
+          <td class=" text-muted">-</td>
+          <td>
+            <div class="btn-group btn-group-xs" role="group" aria-label="actions">
+              <button type="button" class="btn btn-warning glyphicon glyphicon-folder-close"><span class="hidden-xs">Archive</span></button>
+              <button type="button" class="btn btn-success glyphicon glyphicon-cog"><span class="hidden-xs">Manage</span></button>
+              <button type="button" class="btn btn-primary glyphicon glyphicon-cloud-download"><span class="hidden-xs">Download</span></button>
+            </div>
+          </td>
+        </tr>
+        <% end %>
+
+        <% if @archived_books.count > 0 %>
+          <tr class="divider-row"><td colspan="5"></td></tr>
+        <% end %>
+
+        <% @archived_books.each do |guestbook| %>
+        <tr>
+          <td></td>
+          <td><%= guestbook.title %></td>
+          <td><%= time_tag guestbook.created_at.to_date %></td>
+          <td><%= time_tag guestbook.updated_at.to_date %></td>
+          <td>
+            <div class="btn-group btn-group-xs" role="group" aria-label="actions">
+              <button type="button" class="btn btn-primary glyphicon glyphicon-cloud-download"><span class="hidden-xs">Download</span></button>
+            </div>
+          </td>
+        </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+
+  <footer>Copyright someone, 2017</footer>
+</div>
