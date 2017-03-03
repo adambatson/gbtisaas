@@ -15,7 +15,7 @@ class Guestbook < ApplicationRecord
   end
 
   def self.get_default
-    Guestbook.where("is_default=true")
+    Guestbook.where("is_default=true").first
   end
 
 end

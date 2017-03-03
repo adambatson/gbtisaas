@@ -1,10 +1,12 @@
 class HomeController < ApplicationController
 	def index
-  	@admin_nav = false
-  	@active_books = Guestbook.where(:archived => false)
-  	@archived_books = Guestbook.where(:archived => true)
+		@default_book = Guestbook.get_default
+		@current_book = ( params.has_key?(:id) ) ? 
+			Guestbook.where(id: params[:id].to_i).first : 
+			@default_book
+  	@guestbooks = Guestbook.all.where.not(id: @current_book.id).where.not(id: @default_book.id)
+  end
 
-  	@current_book = Guestbook.first
-  	@messages = @current_book.messages.where(:approved => true)
+  def about
   end
 end
