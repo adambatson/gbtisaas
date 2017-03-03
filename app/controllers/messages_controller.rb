@@ -62,17 +62,17 @@ class MessagesController < ApplicationController
   end
 
   def upvote
-    if (cookies[:last_vote] != "up" or cookies[:last_vote].blank?)
+    if (cookies["last_vote_" + params[:id].to_s] != "up" or cookies["last_vote_" + params[:id].to_s].blank?)
       @message.cast_vote true
-      cookies[:last_vote] = {:value => "up"}
+      cookies["last_vote_" + params[:id].to_s] = {:value => "up"}
     end
     render json: {:votes => @message.votes}
   end
 
   def downvote
-    if (cookies[:last_vote] != "down" or cookies[:last_vote].blank?)
+    if (cookies["last_vote_" + params[:id].to_s] != "down" or cookies["last_vote_" + params[:id].to_s].blank?)
       @message.cast_vote false
-      cookies[:last_vote] = "down"
+      cookies["last_vote_" + params[:id].to_s] = "down"
     end
     render json: {:votes => @message.votes}
   end

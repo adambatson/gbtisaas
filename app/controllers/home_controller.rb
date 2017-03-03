@@ -12,4 +12,18 @@ class HomeController < ApplicationController
 
   def about
   end
+
+  def has_voted id
+    case cookies["last_vote_" + id.to_s]
+    when "up"
+      1
+    when "down"
+      -1
+    else
+      0
+    end
+  end
+
+  helper_method :has_voted
+
 end
