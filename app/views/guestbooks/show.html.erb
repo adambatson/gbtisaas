@@ -13,7 +13,7 @@
 <p>
   <strong>Messages:</strong>
   <ul>
-    <% @guestbook.messages.each do |msg| %>
+    <% @messages.each do |msg| %>
       <% if msg.approved %>
         <li><%= msg.content %></li>
       <% end %>
