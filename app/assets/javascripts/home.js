@@ -17,4 +17,28 @@ $(function() {
 		});
 	});
 });
+
+function vote(id, action, upclass, dnclass) {
+	var votes = $('#votes'+id);
+	var upBtn = $('#up'+id);
+	var dnBtn = $('#dn'+id);
+
+	$.getJSON("/messages/"+id+"/"+action, function( data ) {
+		votes.html(data['votes']);
+		votes.attr('class', data['votes']>0 ? 
+			'text-success' : data['votes']<0 ?
+			'text-danger' : '');
+
+		upBtn.attr('class', "btn btn-"+upclass);
+		dnBtn.attr('class', "btn btn-"+dnclass);
+	});
+}
+
+function up(id) {
+	vote(id, 'upvote', 'success', 'default');
+}
+
+function dn(id) {
+	vote(id, 'downvote', 'default', 'danger');
+}
 //# sourceURL=home.js

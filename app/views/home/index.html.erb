@@ -68,15 +68,15 @@
         <span class="message-content"><%= message.content %></span> <small class="text-muted"><%= time_ago_in_words(message.created_at) %> ago</small>
         <span class="pull-right">
           <div class="btn-group btn-group-xs" role="group" aria-label="...">
-            <div class="btn btn-default" aria-label="...">
+            <div id="up<%= message.id %>" onclick="up(<%= message.id %>)" class="btn btn-default" aria-label="...">
               <span class="glyphicon glyphicon-thumbs-up"></span>
             </div>
 
             <div class="btn btn-default" aria-label="...">
-              <span class="<% if message.votes > 0 %>text-success<% elsif message.votes < 0 %>text-danger<% end %>"><%= message.votes %></span>
+              <span id="votes<%= message.id %>" class="<% if message.votes > 0 %>text-success<% elsif message.votes < 0 %>text-danger<% end %>"><%= message.votes %></span>
             </div>
 
-            <div class="btn btn-default" aria-label="...">
+            <div id="dn<%= message.id %>" onclick="dn(<%= message.id %>)" class="btn btn-default" aria-label="...">
               <span class="glyphicon glyphicon-thumbs-down"></span>
             </div>
           </div>
