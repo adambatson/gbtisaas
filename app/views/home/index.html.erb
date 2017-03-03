@@ -1,0 +1,94 @@
+<!-- Jumbotron header -->
+<div class="jumbotron">
+  <div class="container">
+    <h1><%= @current_book.title %> <small><% if @current_book.archived %>Ended <%= time_tag @current_book.updated_at.to_date %><% else %>Ongoing Event<% end %></small></h1>
+    <p><%= @current_book.description %></p>
+    
+    <% if @guestbooks.count > 0 %>
+    <div class="panel panel-info">
+      <div class="panel-heading"><h3>More Guestbooks</h3></div>
+      <ul class="list-group">
+      <% if @current_book.id != @default_book.id %>
+        <a href="/" class="list-group-item list-group-item-success">
+          <h4>Back to <%= @default_book.title %></h4>
+        </a>
+      <% end %>
+
+      <% @guestbooks.each do |guestbook| %>
+        <a href="/?id=<%= guestbook.id %>" class="list-group-item <% if guestbook.id == @default_book.id %>list-group-item-info<% end %>">
+          <h4><%= guestbook.title %> <small><% if guestbook.archived %>Ended <%= time_tag guestbook.updated_at.to_date %><% else %>Ongoing Event<% end %></small></h4>
+        </a>
+      <% end %>
+      </ul>
+    </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <div class="page-header">
+        <h2>Signatures in this Guestbook</h2>
+
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-md-9">
+              <input type="text" id="filter" class="form-control" placeholder="Filter Signatures" />
+            </div>
+            <div class="col-md-3 text-right">
+              <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Sorted 
+                  <% if @sort_by == :recent %>by Most Recent
+                  <% elsif @sort_by == :alphabet %>Alphabetically
+                  <% elsif @sort_by == :votes %>by Most Popular
+                  <% elsif @sort_by == :controversial %>by Most Controversial
+                  <% end %>
+                    
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                  <% if @sort_by != :recent %> <li><a href="/?id=<%= @current_book.id %>&sort_by=recent">Sort By Most Recent</a></li> <% end %>
+                  <% if @sort_by != :alphabet %> <li><a href="/?id=<%= @current_book.id %>&sort_by=alphabet">Sort Alphabetically</a></li> <% end %>
+                  <% if @sort_by != :votes %> <li><a href="/?id=<%= @current_book.id %>&sort_by=votes">Sort by Most Popular</a></li> <% end %>
+                  <% if @sort_by != :controversial %> <li><a href="/?id=<%= @current_book.id %>&sort_by=controversial">Sort by Most Controversial</a></li> <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <ul class="list-group">
+    <% @messages.each do |message| %>
+      <li class="list-group-item">
+        <span class="message-content"><%= message.content %></span> <small class="text-muted"><%= time_ago_in_words(message.created_at) %> ago</small>
+        <span class="pull-right">
+          <div class="btn-group btn-group-xs" role="group" aria-label="...">
+            <div id="up<%= message.id %>" onclick="up(<%= message.id %>)" class="btn btn-default" aria-label="...">
+              <span class="glyphicon glyphicon-thumbs-up"></span>
+            </div>
+
+            <div class="btn btn-default" aria-label="...">
+              <span id="votes<%= message.id %>" class="<% if message.votes > 0 %>text-success<% elsif message.votes < 0 %>text-danger<% end %>"><%= message.votes %></span>
+            </div>
+
+            <div id="dn<%= message.id %>" onclick="dn(<%= message.id %>)" class="btn btn-default" aria-label="...">
+              <span class="glyphicon glyphicon-thumbs-down"></span>
+            </div>
+          </div>
+        </span>
+      </li>
+    <% end %>
+
+      <a href="/" class="list-group-item text-center">
+        <span class="text-muted">Back To Top</span>
+      </a>
+    </ul>
+</div>
+
+  <footer><span class="pull-left"><a class="btn btn-primary btn-xs" href="about.html">What is this?</a></span> Copyright someone, 2017</footer>
+</div>
