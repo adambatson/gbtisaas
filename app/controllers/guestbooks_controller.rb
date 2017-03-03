@@ -10,6 +10,18 @@ class GuestbooksController < ApplicationController
   # GET /guestbooks/1
   # GET /guestbooks/1.json
   def show
+    #abort @guestbook.messages.inspect
+    #@messages = Message.where('guestbook_id = ' + params[:id])
+    case sort_params[:sort_by]
+    when 'recent'
+      @messages = Message.where('guestbook_id = ' + params[:id]).order('created_at DESC')
+    when 'votes'
+      @messages = Message.where('guestbook_id = ' + params[:id]).order('votes DESC')
+    when 'alphabet'
+      @messages = Message.where('guestbook_id = ' + params[:id]).order('content ASC')
+    else
+      @messages = Message.where('guestbook_id = ' + params[:id])
+    end
   end
 
   # GET /guestbooks/new
@@ -79,5 +91,9 @@ class GuestbooksController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def guestbook_params
       params.require(:guestbook).permit(:title, :archived)
+    end
+
+    def sort_params
+      params.permit(:sort_by)
     end
 end
