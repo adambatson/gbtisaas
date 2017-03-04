@@ -1,0 +1,106 @@
+<div class="page-header">
+  <h1>
+    Manage Signatures <small><%= @guestbook.title %></small>
+    <div class="btn-group responsive-right">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Change Guestbook
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu">
+      <% @guestbooks.each do |guestbook| %>
+        <li><a class="btn" href="/admin/signatures/<%= guestbook.id %>"><%= guestbook.title %> <% if guestbook.is_default %><span class="text-muted">Default</span><% end %></a></li>
+      <% end %>
+      </ul>
+    </div>
+  </h1>
+</div>  
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h4>Guestbook Settings</h4>
+    <%= form_for(@guestbook) do |f| %>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="messages" onclick="messages_toggle(this)"> Auto-approve messages
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="profanity"> Enable profanity filter
+        </label>
+      </div>
+
+      <div class="form-group" style="border-radius: 0">
+        <label class="control-label sr-only" for="description">Description</label>
+        <textarea placeholder="Description" id="description" name="guestbook[description]" class="form-control" rows="3"><%= @guestbook.description %></textarea>
+      </div>
+
+      <div class="form-group" style="border-radius: 0">
+        <input value="Save" class="btn btn-primary" type="submit" />
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= form_for(@message) do |f| %>
+      <input type="hidden" name="message[guestbook_id]" value="<%= @guestbook.id %>" />
+      <% if @error != nil %>
+          <div class="alert alert-danger" role="alert"><%= @error %></div>
+      <% end %>
+
+      <div class="input-group">
+        <label class="control-label sr-only" for="content">Content</label>
+        <input type="text" class="form-control" id="content" name="message[content]" placeholder="Content">
+        <span class="input-group-btn">
+          <input class="btn btn-primary" data-reload="true" type="submit" value="Add Message" />
+        </span>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="table-responsive">
+    <table class="table table-tool table-striped" style="border-collapse: collapse;">
+      <tr>
+        <th>Name</th>
+        <th>Added</th>
+        <th>Actions</th>
+      </tr>
+
+      <% @guestbook.approved_messages.each do |message| %>
+      <tr>
+        <td><%= message.content %></td>
+        <td><%= time_tag message.created_at.to_date %></td>
+        <td>
+          <div class="btn-group btn-group-xs" role="group" aria-label="actions">
+            <a data-method="delete" no-turbolink="true" data-confirm="Are you sure?" href="/messages/<%= message.id %>" type="button" class="btn btn-danger glyphicon glyphicon-trash"><span class="hidden-xs">Delete</span></a>
+            <button type="button" class="btn btn-success glyphicon glyphicon-ok"><span class="hidden-xs">Approve</span></button>
+          </div>
+        </td>
+      </tr>
+      <% end %>
+
+      <% if @guestbook.unapproved_messages.count > 0 %>
+        <tr class="divider-row"><td colspan="3"></td></tr>
+      <% end %>
+
+      <% @guestbook.unapproved_messages.each do |message| %>
+      <tr>
+        <td><%= message.content %></td>
+        <td><%= time_tag message.created_at.to_date %></td>
+        <td>
+          <div class="btn-group btn-group-xs" role="group" aria-label="actions">
+            <a data-method="delete" data-confirm="Are you sure?" href="/messages/<%= message.id %>" type="button" class="btn btn-danger glyphicon glyphicon-trash"><span class="hidden-xs">Delete</span></a>
+            <button type="button" class="btn btn-success glyphicon glyphicon-ok"><span class="hidden-xs">Approve</span></button>
+          </div>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

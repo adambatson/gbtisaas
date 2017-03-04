@@ -9,8 +9,18 @@ class Guestbook < ApplicationRecord
     self.messages.select(&l)
   end
 
+  def unapproved_messages
+    l = lambda { |x| !x.approved }
+    self.messages.select(&l)
+  end
+
   def toggle_default
     self.is_default = !self.is_default
+    self.save
+  end
+
+  def archive
+    self.archived = true
     self.save
   end
 
@@ -35,5 +45,4 @@ class Guestbook < ApplicationRecord
 
     return messages
   end
-
 end

@@ -1,5 +1,19 @@
 class GuestbooksController < ApplicationController
   before_action :set_guestbook, only: [:show, :edit, :update, :destroy]
+  layout 'admin', :only => [:admin]
+
+  def admin
+    @active = "guestbooks"
+    @guestbook = Guestbook.new
+    @error = (params.has_key? :error) ? params[:error] : nil
+    @open_books = Guestbook.where(archived: false)
+    @archived_books = Guestbook.where(archived: true)
+  end
+
+
+
+
+
 
   # GET /guestbooks
   # GET /guestbooks.json
@@ -42,10 +56,10 @@ class GuestbooksController < ApplicationController
 
     respond_to do |format|
       if @guestbook.save
-        format.html { redirect_to @guestbook, notice: 'Guestbook was successfully created.' }
+        format.html { redirect_to(:back) }
         format.json { render :show, status: :created, location: @guestbook }
       else
-        format.html { render :new }
+        format.html { redirect_to action: :admin, error: @guestbook.errors.full_messages.first }
         format.json { render json: @guestbook.errors, status: :unprocessable_entity }
       end
     end
@@ -56,10 +70,10 @@ class GuestbooksController < ApplicationController
   def update
     respond_to do |format|
       if @guestbook.update(guestbook_params)
-        format.html { redirect_to @guestbook, notice: 'Guestbook was successfully updated.' }
+        format.html { redirect_to(:back) }
         format.json { render :show, status: :ok, location: @guestbook }
       else
-        format.html { render :edit }
+        format.html { redirect_to(:back) }
         format.json { render json: @guestbook.errors, status: :unprocessable_entity }
       end
     end
@@ -70,7 +84,7 @@ class GuestbooksController < ApplicationController
   def destroy
     @guestbook.destroy
     respond_to do |format|
-      format.html { redirect_to guestbooks_url, notice: 'Guestbook was successfully destroyed.' }
+      format.html { redirect_to(:back) }
       format.json { head :no_content }
     end
   end
@@ -84,6 +98,25 @@ class GuestbooksController < ApplicationController
     render json: {:guestbook => default}
   end
 
+  def archive
+    book = Guestbook.find(params[:id])
+    book.archive
+    redirect_to :admin
+  end
+
+  def export
+    require 'csv'
+    book = Guestbook.find(params[:id])
+    csv = CSV.generate do |csv|
+      csv << ["Message", "Saved"]
+      book.approved_messages.each do |message|
+        csv << [message.content, message.created_at]
+      end
+    end
+
+    send_data csv, :type => 'text/csv', :filename => book.title + '.csv'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_guestbook
@@ -92,7 +125,7 @@ class GuestbooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def guestbook_params
-      params.require(:guestbook).permit(:title, :archived)
+      params.require(:guestbook).permit(:title, :description, :archived)
     end
 
     def sort_params

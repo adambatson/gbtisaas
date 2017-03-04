@@ -1,5 +1,14 @@
 class MessagesController < ApplicationController
   before_action :set_message, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
+  layout 'admin', :only => [:admin]
+
+  def admin
+    @active = "signatures"
+    @message = Message.new
+    @guestbook = (params.has_key? :book_id) ? Guestbook.find(params[:book_id]) : Guestbook.get_default
+    @error = (params.has_key? :error) ? params[:error] : nil
+    @guestbooks = Guestbook.where(archived: false)
+  end
 
   # GET /messages
   # GET /messages.json
@@ -28,10 +37,10 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       if @message.save
-        format.html { redirect_to @message, notice: 'Message was successfully created.' }
+        format.html { redirect_to(:back) }
         format.json { render :show, status: :created, location: @message }
       else
-        format.html { render :new }
+        format.html { redirect_to(:back, error: @message.errors.full_messages.first) }
         format.json { render json: @message.errors, status: :unprocessable_entity }
       end
     end
@@ -56,7 +65,8 @@ class MessagesController < ApplicationController
   def destroy
     @message.destroy
     respond_to do |format|
-      format.html { redirect_to messages_url, notice: 'Message was successfully destroyed.' }
+      params[:id] = @message.guestbook_id
+      format.html { redirect_to(:back) }
       format.json { head :no_content }
     end
   end

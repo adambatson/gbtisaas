@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   end
   resources :guestbooks do
     member do
+      get :archive
+      get :export
       get :set_default
     end
   end
@@ -17,9 +19,13 @@ Rails.application.routes.draw do
   root 'home#index'
   get 'about', to: 'home#about'
 
-  get 'admin', to: 'admin#guestbooks'
-  get 'admin/guestbooks'
-  get 'admin/signatures'
+
+  get 'admin', to: 'guestbooks#admin'
+  get 'admin/guestbooks', to: 'guestbooks#admin'
+
+  get 'admin/signatures/:book_id', to: 'messages#admin'
+  get 'admin/signatures', to: 'messages#admin'
+  
   get 'admin/access'
   get 'admin/accounts'
 end
