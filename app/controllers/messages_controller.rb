@@ -62,7 +62,17 @@ class MessagesController < ApplicationController
   end
 
   def upvote
-    if (cookies["last_vote_" + params[:id].to_s] != "up" or cookies["last_vote_" + params[:id].to_s].blank?)
+    if (cookies["last_vote_" + params[:id].to_s].blank?)
+      @message.cast_vote true
+      @message.inc_vote_count
+      cookies["last_vote_" + params[:id].to_s] = {:value => "up"}
+    elsif cookies["last_vote_" + params[:id].to_s] == "up"
+      #undo vote
+      @message.cast_vote false
+      @message.dec_vote_count
+      cookies["last_vote_" + params[:id].to_s] = {:value => ""}
+    else 
+      #Simple upvote
       @message.cast_vote true
       cookies["last_vote_" + params[:id].to_s] = {:value => "up"}
     end
@@ -70,9 +80,19 @@ class MessagesController < ApplicationController
   end
 
   def downvote
-    if (cookies["last_vote_" + params[:id].to_s] != "down" or cookies["last_vote_" + params[:id].to_s].blank?)
+    if (cookies["last_vote_" + params[:id].to_s].blank?)
       @message.cast_vote false
-      cookies["last_vote_" + params[:id].to_s] = "down"
+      @message.inc_vote_count
+      cookies["last_vote_" + params[:id].to_s] = {:value => "down"}
+    elsif cookies["last_vote_" + params[:id].to_s] == "down"
+      #undo vote
+      @message.cast_vote true
+      @message.dec_vote_count
+      cookies["last_vote_" + params[:id].to_s] = {:value => ""}
+    else 
+      #Simple downvote
+      @message.cast_vote true
+      cookies["last_vote_" + params[:id].to_s] = {:value => "down"}
     end
     render json: {:votes => @message.votes}
   end
