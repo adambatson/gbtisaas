@@ -25,7 +25,11 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
-    @message = Message.new(message_params)
+    _params = message_params
+    if _params[:guestbook_id] == nil
+      _params[:guestbook_id] = Guestbook.get_default.id
+    end
+    @message = Message.new(_params)
 
     respond_to do |format|
       if @message.save
