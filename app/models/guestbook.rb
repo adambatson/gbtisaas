@@ -4,6 +4,10 @@ class Guestbook < ApplicationRecord
   validates :title, presence: true
   validates :title, uniqueness: true
 
+  def as_json(options={})
+    super(include: :messages)
+  end
+
   def approved_messages
     l = lambda { |x| x.approved }
     self.messages.select(&l)
