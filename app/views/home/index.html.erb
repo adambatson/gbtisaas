@@ -64,11 +64,14 @@
 
     <ul class="list-group">
     <% @messages.each do |message| %>
+      <% vote = has_voted message.id %>
+      <% up_button_class = (vote == 1) ? "btn btn-success" : "btn btn-default" %>
+      <% down_button_class = (vote == -1) ? "btn btn-danger" : "btn btn-default" %>
       <li class="list-group-item">
         <span class="message-content"><%= message.content %></span> <small class="text-muted"><%= time_ago_in_words(message.created_at) %> ago</small>
         <span class="pull-right">
           <div class="btn-group btn-group-xs" role="group" aria-label="...">
-            <div id="up<%= message.id %>" onclick="up(<%= message.id %>)" class="btn btn-default" aria-label="...">
+            <div id="up<%= message.id %>" onclick="up(<%= message.id %>)" class="<%=up_button_class%>" aria-label="...">
               <span class="glyphicon glyphicon-thumbs-up"></span>
             </div>
 
@@ -76,7 +79,7 @@
               <span id="votes<%= message.id %>" class="<% if message.votes > 0 %>text-success<% elsif message.votes < 0 %>text-danger<% end %>"><%= message.votes %></span>
             </div>
 
-            <div id="dn<%= message.id %>" onclick="dn(<%= message.id %>)" class="btn btn-default" aria-label="...">
+            <div id="dn<%= message.id %>" onclick="dn(<%= message.id %>)" class="<%=down_button_class%>" aria-label="...">
               <span class="glyphicon glyphicon-thumbs-down"></span>
             </div>
           </div>

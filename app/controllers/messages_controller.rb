@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+  skip_before_filter :verify_authenticity_token
   before_action :set_message, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
   layout 'admin', :only => [:admin]
 
@@ -33,7 +34,11 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
-    @message = Message.new(message_params)
+    _params = message_params
+    if _params[:guestbook_id] == nil
+      _params[:guestbook_id] = Guestbook.get_default.id
+    end
+    @message = Message.new(_params)
 
     respond_to do |format|
       if @message.save
@@ -72,17 +77,37 @@ class MessagesController < ApplicationController
   end
 
   def upvote
-    if (cookies[:last_vote] != "up" or cookies[:last_vote].blank?)
+    if (cookies["last_vote_" + params[:id].to_s].blank?)
       @message.cast_vote true
-      cookies[:last_vote] = {:value => "up"}
+      @message.inc_vote_count
+      cookies["last_vote_" + params[:id].to_s] = {:value => "up"}
+    elsif cookies["last_vote_" + params[:id].to_s] == "up"
+      #undo vote
+      @message.cast_vote false
+      @message.dec_vote_count
+      cookies["last_vote_" + params[:id].to_s] = {:value => ""}
+    else 
+      #Simple upvote
+      @message.cast_vote true
+      cookies["last_vote_" + params[:id].to_s] = {:value => "up"}
     end
     render json: {:votes => @message.votes}
   end
 
   def downvote
-    if (cookies[:last_vote] != "down" or cookies[:last_vote].blank?)
+    if (cookies["last_vote_" + params[:id].to_s].blank?)
       @message.cast_vote false
-      cookies[:last_vote] = "down"
+      @message.inc_vote_count
+      cookies["last_vote_" + params[:id].to_s] = {:value => "down"}
+    elsif cookies["last_vote_" + params[:id].to_s] == "down"
+      #undo vote
+      @message.cast_vote true
+      @message.dec_vote_count
+      cookies["last_vote_" + params[:id].to_s] = {:value => ""}
+    else 
+      #Simple downvote
+      @message.cast_vote true
+      cookies["last_vote_" + params[:id].to_s] = {:value => "down"}
     end
     render json: {:votes => @message.votes}
   end
