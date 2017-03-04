@@ -12,18 +12,24 @@ class GuestbooksController < ApplicationController
   def show
     #abort @guestbook.messages.inspect
     #@messages = Message.where('guestbook_id = ' + params[:id])
-    case sort_params[:sort_by]
-    when 'recent'
-      @messages = Message.where('guestbook_id = ' + params[:id]).order('created_at DESC')
-    when 'votes'
-      @messages = Message.where('guestbook_id = ' + params[:id]).order('votes DESC')
-    when 'alphabet'
-      @messages = Message.where('guestbook_id = ' + params[:id]).order('content ASC')
-    when 'controversial'
-      @messages = Message.where('guestbook_id = ' + params[:id]).order('(votes_cast - votes) DESC')
-    else
-      @messages = Message.where('guestbook_id = ' + params[:id])
+    respond_to do |format|
+      format.html {
+        case sort_params[:sort_by]
+        when 'recent'
+          @messages = Message.where('guestbook_id = ' + params[:id]).order('created_at DESC')
+        when 'votes'
+          @messages = Message.where('guestbook_id = ' + params[:id]).order('votes DESC')
+        when 'alphabet'
+          @messages = Message.where('guestbook_id = ' + params[:id]).order('content ASC')
+        when 'controversial'
+          @messages = Message.where('guestbook_id = ' + params[:id]).order('(votes_cast - votes) DESC')
+        else
+          @messages = Message.where('guestbook_id = ' + params[:id])
+        end
+      }
+      format.json {render json: @guestbook}
     end
+    
   end
 
   # GET /guestbooks/new
