@@ -51,5 +51,5 @@ Rails.application.routes.draw do
   get 'admin/accounts', to: 'users#admin'
 
   root 'home#index'
-  get '/:id', to: 'home#index'
+  get '/view/:id', to: 'home#index'
 end
