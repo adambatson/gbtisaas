@@ -29,8 +29,8 @@ function vote(id, action, upclass, dnclass) {
 			'text-success' : data['votes']<0 ?
 			'text-danger' : '');
 
-		upBtn.attr('class', "btn btn-"+upclass);
-		dnBtn.attr('class', "btn btn-"+dnclass);
+		upBtn.attr('class', data['state'] == "" ? "btn btn-default" : "btn btn-"+upclass);
+		dnBtn.attr('class', data['state'] == "" ? "btn btn-default" : "btn btn-"+dnclass);
 	});
 }
 

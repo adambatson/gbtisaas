@@ -1,12 +1,7 @@
 module ApplicationHelper
-  def draw_nav(text, path, target_controller, target_action)
-    is_active = target_controller == ProviderController and controller.action_name == target_action;
-    content_tag(:li,
-      content_tag(:a, 
-      text + ( (is_active) ? content_tag(:span, "(current)", :class=>"sr-only") : "" ), 
-        :href=>path
-      ), 
-      :class=>(is_active) ? 'active' : nil
-    );
+  def admin_nav(path, label, is_active)
+    is_active ?
+      "<li class=\"active\"><a href=\"#{path}\">#{label} <span class=\"sr-only\">(current)</span></a></li>".html_safe :
+      "<li><a href=\"#{path}\">#{label}</a></li>".html_safe
   end
 end

@@ -1,0 +1,74 @@
+<div class="page-header">
+  <h1>Manage Guestbooks</h1>
+</div>  
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= form_for(@guestbook) do |f| %>
+      <% if @error != nil %>
+          <div class="alert alert-danger" role="alert"><%= @error %></div>
+      <% end %>
+
+      <div class="form-group input-group">
+        <label class="control-label sr-only" for="title">Book Title</label>
+        <input type="text" class="form-control" id="title" name="guestbook[title]" placeholder="Name">
+        <span class="input-group-btn">
+          <input value="New Guestbook" class="btn btn-primary" type="submit" />
+        </span>
+      </div>
+
+      <div class="form-group" style="border-radius: 0">
+        <label class="control-label sr-only" for="description">Description</label>
+        <textarea placeholder="Description" id="description" name="guestbook[description]" class="form-control" rows="3"></textarea>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="table-responsive">
+    <table class="table table-tool table-striped" style="border-collapse: collapse;">
+      <tr>
+        <th>Default</th>
+        <th>Name</th>
+        <th>Opened</th>
+        <th>Archived</th>
+        <th>Actions</th>
+      </tr>
+
+      <% @open_books.each do |guestbook| %>
+      <tr>
+        <td><input type="radio" name="default" <% if guestbook.is_default %> checked="" <% end %> onclick="defaultBook(<%= guestbook.id %>)" /></td>
+        <td><%= guestbook.title %></td>
+        <td><%= time_tag guestbook.created_at.to_date %></td>
+        <td class=" text-muted">-</td>
+        <td>
+          <div class="btn-group btn-group-xs" role="group" aria-label="actions">
+            <a href="/guestbooks/<%= guestbook.id %>/archive" data-confirm="Are you sure?" '<%= guestbook.title %>')" type="button" class="btn btn-warning glyphicon glyphicon-folder-close"><span class="hidden-xs">Archive</span></button>
+            <a href="/admin/signatures/<%= guestbook.id %>" type="button" class="btn btn-success glyphicon glyphicon-cog"><span class="hidden-xs">Manage</span></a>
+            <a target="_blank" href="/guestbooks/<%= guestbook.id %>/export" type="button" class="btn btn-primary glyphicon glyphicon-cloud-download"><span class="hidden-xs">Download</span></a>
+          </div>
+        </td>
+      </tr>
+      <% end %>
+
+      <% if @archived_books.count > 0 %>
+        <tr class="divider-row"><td colspan="5"></td></tr>
+      <% end %>
+
+      <% @archived_books.each do |guestbook| %>
+      <tr>
+        <td></td>
+        <td><%= guestbook.title %></td>
+        <td><%= time_tag guestbook.created_at.to_date %></td>
+        <td><%= time_tag guestbook.updated_at.to_date %></td>
+        <td>
+          <div class="btn-group btn-group-xs" role="group" aria-label="actions">
+            <a target="_blank" href="/guestbooks/<%= guestbook.id %>/export" type="button" class="btn btn-primary glyphicon glyphicon-cloud-download"><span class="hidden-xs">Download</span></a>
+          </div>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

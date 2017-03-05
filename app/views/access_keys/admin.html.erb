@@ -1,0 +1,57 @@
+<div class="page-header">
+  <h1>Manage Access Keys</h1>
+</div>  
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= form_for(@access_key) do |f| %>
+      <div class="input-group">
+        <label class="control-label sr-only" for="label">Label</label>
+        <input type="text" class="form-control" id="label" name="access_key[label]" placeholder="Label">
+        <span class="input-group-btn">
+          <input value="Generate Key" class="btn btn-primary" type="submit" />
+        </span>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Remote Access Keys</h3>
+  </div>
+    <div class="table-responsive">
+      <table class="table table-tool table-striped" style="border-collapse: collapse;">
+        <tr>
+          <th>Label</th>
+          <th>Access Key</th>
+          <th>Guestbook</th>
+          <th></th>
+        </tr>
+
+        <% @access_keys.each do |key| %>
+        <tr>
+          <td><%= key.label %></td>
+          <td><%= key.key %></td>
+          <td>
+            <select class="select-sm form-control" onchange="setbook(this, <%= key.id %>)">
+                  <option value="<%= @default_guestbook.id %>" <% if key.guestbook_id == @default_guestbook.id %>selected<% end %>><%= @default_guestbook.title %></option>
+                  <option class="select-separator" disabled>&nbsp;</option>
+
+              <% @guestbooks.each do |guestbook| %>
+                  <option value="<%= guestbook.id %>" <% if key.guestbook_id == guestbook.id %>selected<% end %>><%= guestbook.title %></option>
+              <% end %>
+            </select>
+          </td>
+          <td>
+            <div class="btn-group btn-group-xs" role="group" aria-label="actions">
+              <a data-method="delete" data-confirm="Are you sure?" href="/access_keys/<%= key.id %>"type="button" class="btn btn-danger glyphicon glyphicon-trash">
+                <span class="hidden-xs">Delete</span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>

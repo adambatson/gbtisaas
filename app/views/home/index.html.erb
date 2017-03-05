@@ -4,7 +4,7 @@
     <h1><%= @current_book.title %> <small><% if @current_book.archived %>Ended <%= time_tag @current_book.updated_at.to_date %><% else %>Ongoing Event<% end %></small></h1>
     <p><%= @current_book.description %></p>
     
-    <% if @guestbooks.count > 0 %>
+    <% if @guestbooks.count > 0 || @current_book != @default_book %>
     <div class="panel panel-info">
       <div class="panel-heading"><h3>More Guestbooks</h3></div>
       <ul class="list-group">
@@ -15,7 +15,7 @@
       <% end %>
 
       <% @guestbooks.each do |guestbook| %>
-        <a href="/?id=<%= guestbook.id %>" class="list-group-item <% if guestbook.id == @default_book.id %>list-group-item-info<% end %>">
+        <a href="/<%= guestbook.id %>" class="list-group-item <% if guestbook.id == @default_book.id %>list-group-item-info<% end %>">
           <h4><%= guestbook.title %> <small><% if guestbook.archived %>Ended <%= time_tag guestbook.updated_at.to_date %><% else %>Ongoing Event<% end %></small></h4>
         </a>
       <% end %>
@@ -87,7 +87,7 @@
       </li>
     <% end %>
 
-      <a href="/" class="list-group-item text-center">
+      <a href="#" class="list-group-item text-center">
         <span class="text-muted">Back To Top</span>
       </a>
     </ul>

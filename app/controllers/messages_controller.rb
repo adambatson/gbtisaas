@@ -1,6 +1,17 @@
 class MessagesController < ApplicationController
-  before_action :set_message, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
+  before_action :require_login, :only => [:admin, :update, :destroy, :unapprove, :approve]
+  before_action :require_key, :only => [:index, :show]
   skip_before_filter :verify_authenticity_token
+  before_action :set_message, only: [:show, :edit, :update, :destroy, :unapprove, :approve, :upvote, :downvote]
+  layout 'admin', :only => [:admin]
+
+  def admin
+    @active = "signatures"
+    @message = Message.new
+    @guestbook = (params.has_key? :book_id) ? Guestbook.find(params[:book_id]) : Guestbook.get_default
+    @error = (params.has_key? :error) ? params[:error] : nil
+    @guestbooks = Guestbook.where(archived: false)
+  end
 
   # GET /messages
   # GET /messages.json
@@ -25,18 +36,35 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
+    if request.format.json?
+      require_key
+      if _params[:guestbook_id] == nil
+        _params[:guestbook_id] = AccessKey.where(params[:key]).guestbook_id
+      end
+    else
+      require_login
+    end
+
     _params = message_params
     if _params[:guestbook_id] == nil
       _params[:guestbook_id] = Guestbook.get_default.id
     end
+
+    # Auto approve, if passes filter
+    guestbook = Guestbook.find(_params[:guestbook_id])
+    _params[:approved] = guestbook.auto_approve
+    if guestbook.profanity_filter && Obscenity.profane?(_params[:content])
+      _params[:approved] = false
+    end
+
     @message = Message.new(_params)
 
     respond_to do |format|
       if @message.save
-        format.html { redirect_to @message, notice: 'Message was successfully created.' }
+        format.html { redirect_to(:back) }
         format.json { render :show, status: :created, location: @message }
       else
-        format.html { render :new }
+        format.html { redirect_to(:back, error: @message.errors.full_messages.first) }
         format.json { render json: @message.errors, status: :unprocessable_entity }
       end
     end
@@ -61,8 +89,25 @@ class MessagesController < ApplicationController
   def destroy
     @message.destroy
     respond_to do |format|
-      format.html { redirect_to messages_url, notice: 'Message was successfully destroyed.' }
+      params[:id] = @message.guestbook_id
+      format.html { redirect_to(:back) }
       format.json { head :no_content }
+    end
+  end
+
+  def unapprove
+    @message.approved = false
+    @message.save
+    respond_to do |format|
+      format.html { redirect_to(:back) }
+    end
+  end
+
+  def approve
+    @message.approved = true
+    @message.save
+    respond_to do |format|
+      format.html { redirect_to(:back) }
     end
   end
 
@@ -81,7 +126,7 @@ class MessagesController < ApplicationController
       @message.cast_vote true
       cookies["last_vote_" + params[:id].to_s] = {:value => "up"}
     end
-    render json: {:votes => @message.votes}
+    render json: {:votes => @message.votes, :state => cookies["last_vote_" + params[:id].to_s]}
   end
 
   def downvote
@@ -99,7 +144,13 @@ class MessagesController < ApplicationController
       @message.cast_vote true
       cookies["last_vote_" + params[:id].to_s] = {:value => "down"}
     end
-    render json: {:votes => @message.votes}
+    render json: {:votes => @message.votes, :state => cookies["last_vote_" + params[:id].to_s]}
+  end
+
+  def require_key
+    if !params.has_key? 'key' || !AccessKey.validate(params[:key])
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
 
   private
