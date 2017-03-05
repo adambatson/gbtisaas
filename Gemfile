@@ -27,6 +27,7 @@ gem 'bootstrap-sass', '~> 3.3.0'
 gem 'autoprefixer-rails'
 
 gem 'clearance'
+gem 'obscenity'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

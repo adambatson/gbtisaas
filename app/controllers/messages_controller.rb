@@ -38,6 +38,9 @@ class MessagesController < ApplicationController
   def create
     if request.format.json?
       require_key
+      if _params[:guestbook_id] == nil
+        _params[:guestbook_id] = AccessKey.where(params[:key]).guestbook_id
+      end
     else
       require_login
     end
@@ -46,6 +49,14 @@ class MessagesController < ApplicationController
     if _params[:guestbook_id] == nil
       _params[:guestbook_id] = Guestbook.get_default.id
     end
+
+    # Auto approve, if passes filter
+    guestbook = Guestbook.find(_params[:guestbook_id])
+    _params[:approved] = guestbook.auto_approve
+    if guestbook.profanity_filter && Obscenity.profane?(_params[:content])
+      _params[:approved] = false
+    end
+
     @message = Message.new(_params)
 
     respond_to do |format|

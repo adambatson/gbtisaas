@@ -22,13 +22,13 @@
     <%= form_for(@guestbook) do |f| %>
       <div class="checkbox">
         <label>
-          <input type="checkbox" id="messages" onclick="messages_toggle(this)"> Auto-approve messages
+          <input type="checkbox" id="messages" onclick="messages_toggle(this)" name="guestbook[auto_approve]" <% if @guestbook.auto_approve %>checked<% end %>> Auto-approve messages
         </label>
       </div>
 
       <div class="checkbox">
         <label>
-          <input type="checkbox" id="profanity"> Enable profanity filter
+          <input type="checkbox" id="profanity" name="guestbook[filter_profanity]" <% if @guestbook.filter_profanity %>checked<% end %>> Enable profanity filter
         </label>
       </div>
 
