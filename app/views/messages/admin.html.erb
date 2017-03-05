@@ -79,7 +79,7 @@
         <td>
           <div class="btn-group btn-group-xs" role="group" aria-label="actions">
             <a data-method="delete" no-turbolink="true" data-confirm="Are you sure?" href="/messages/<%= message.id %>" type="button" class="btn btn-danger glyphicon glyphicon-trash"><span class="hidden-xs">Delete</span></a>
-            <button type="button" class="btn btn-success glyphicon glyphicon-ok"><span class="hidden-xs">Approve</span></button>
+            <a href="/messages/<%= message.id %>/unapprove" type="button" class="btn btn-warning glyphicon glyphicon-remove"><span class="hidden-xs">Unapprove</span></a>
           </div>
         </td>
       </tr>
@@ -96,7 +96,7 @@
         <td>
           <div class="btn-group btn-group-xs" role="group" aria-label="actions">
             <a data-method="delete" data-confirm="Are you sure?" href="/messages/<%= message.id %>" type="button" class="btn btn-danger glyphicon glyphicon-trash"><span class="hidden-xs">Delete</span></a>
-            <button type="button" class="btn btn-success glyphicon glyphicon-ok"><span class="hidden-xs">Approve</span></button>
+            <a href="/messages/<%= message.id %>/approve" type="button" class="btn btn-success glyphicon glyphicon-ok"><span class="hidden-xs">Approve</span></a>
           </div>
         </td>
       </tr>

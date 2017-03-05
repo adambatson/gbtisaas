@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  label: MyString
+  key: MyString
+  guestbook: one
+
+two:
+  label: MyString
+  key: MyString
+  guestbook: two

@@ -1,6 +1,6 @@
 class MessagesController < ApplicationController
   skip_before_filter :verify_authenticity_token
-  before_action :set_message, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
+  before_action :set_message, only: [:show, :edit, :update, :destroy, :unapprove, :approve, :upvote, :downvote]
   layout 'admin', :only => [:admin]
 
   def admin
@@ -73,6 +73,22 @@ class MessagesController < ApplicationController
       params[:id] = @message.guestbook_id
       format.html { redirect_to(:back) }
       format.json { head :no_content }
+    end
+  end
+
+  def unapprove
+    @message.approved = false
+    @message.save
+    respond_to do |format|
+      format.html { redirect_to(:back) }
+    end
+  end
+
+  def approve
+    @message.approved = true
+    @message.save
+    respond_to do |format|
+      format.html { redirect_to(:back) }
     end
   end
 

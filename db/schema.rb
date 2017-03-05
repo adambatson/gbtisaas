@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170304222448) do
+ActiveRecord::Schema.define(version: 20170305005034) do
+
+  create_table "access_keys", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "label"
+    t.string   "key"
+    t.integer  "guestbook_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["guestbook_id"], name: "index_access_keys_on_guestbook_id", using: :btree
+  end
 
   create_table "guestbooks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title"
@@ -23,13 +32,14 @@ ActiveRecord::Schema.define(version: 20170304222448) do
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text     "content",      limit: 65535
-    t.boolean  "approved",                   default: true
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.boolean  "approved",                   default: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.integer  "guestbook_id"
     t.integer  "votes",                      default: 0
     t.integer  "votes_cast",                 default: 0
     t.index ["guestbook_id"], name: "index_messages_on_guestbook_id", using: :btree
   end
 
+  add_foreign_key "access_keys", "guestbooks"
 end
