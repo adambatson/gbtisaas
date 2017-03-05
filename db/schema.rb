@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170305053044) do
+ActiveRecord::Schema.define(version: 20170305054412) do
 
   create_table "access_keys", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "label"
@@ -28,8 +28,8 @@ ActiveRecord::Schema.define(version: 20170305053044) do
     t.datetime "updated_at",                                     null: false
     t.boolean  "is_default",                     default: false
     t.text     "description",      limit: 65535
-    t.boolean  "auto_approve",                                   null: false
-    t.boolean  "filter_profanity",                               null: false
+    t.boolean  "auto_approve",                   default: false, null: false
+    t.boolean  "filter_profanity",               default: false, null: false
   end
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
