@@ -14,3 +14,5 @@ book.messages.create([
   {content: 'Richard', approved: true, created_at: 3.day.ago, votes: 17},
   {content: 'James', approved: true, created_at: 3.day.ago, votes: 17, votes_cast: 34}
 ]);
+
+user = User.create!(email: 'admin@example.com', password: 'admin')

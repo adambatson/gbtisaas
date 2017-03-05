@@ -1,4 +1,5 @@
 class GuestbooksController < ApplicationController
+  before_action :require_login
   before_action :set_guestbook, only: [:show, :edit, :update, :destroy]
   layout 'admin', :only => [:admin]
 

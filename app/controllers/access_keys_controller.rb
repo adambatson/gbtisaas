@@ -1,4 +1,5 @@
 class AccessKeysController < ApplicationController
+  before_action :require_login
   layout 'admin', :only => [:admin]
   
   def admin

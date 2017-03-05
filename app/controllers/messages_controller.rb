@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+  before_action :require_login
   skip_before_filter :verify_authenticity_token
   before_action :set_message, only: [:show, :edit, :update, :destroy, :unapprove, :approve, :upvote, :downvote]
   layout 'admin', :only => [:admin]
@@ -107,7 +108,7 @@ class MessagesController < ApplicationController
       @message.cast_vote true
       cookies["last_vote_" + params[:id].to_s] = {:value => "up"}
     end
-    render json: {:votes => @message.votes}
+    render json: {:votes => @message.votes, :state => cookies["last_vote_" + params[:id].to_s]}
   end
 
   def downvote
@@ -125,7 +126,7 @@ class MessagesController < ApplicationController
       @message.cast_vote true
       cookies["last_vote_" + params[:id].to_s] = {:value => "down"}
     end
-    render json: {:votes => @message.votes}
+    render json: {:votes => @message.votes, :state => cookies["last_vote_" + params[:id].to_s]}
   end
 
   private
