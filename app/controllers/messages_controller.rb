@@ -53,7 +53,7 @@ class MessagesController < ApplicationController
     # Auto approve, if passes filter
     guestbook = Guestbook.find(_params[:guestbook_id])
     _params[:approved] = guestbook.auto_approve
-    if guestbook.profanity_filter && Obscenity.profane?(_params[:content])
+    if guestbook.filter_profanity && Obscenity.profane?(_params[:content])
       _params[:approved] = false
     end
 
