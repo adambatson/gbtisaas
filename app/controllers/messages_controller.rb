@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
-  before_action :require_login
+  before_action :require_login, :only => [:admin, :update, :destroy, :unapprove, :approve]
+  before_action :require_key, :only => [:index, :show]
   skip_before_filter :verify_authenticity_token
   before_action :set_message, only: [:show, :edit, :update, :destroy, :unapprove, :approve, :upvote, :downvote]
   layout 'admin', :only => [:admin]
@@ -35,6 +36,12 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
+    if request.format.json?
+      require_key
+    else
+      require_login
+    end
+
     _params = message_params
     if _params[:guestbook_id] == nil
       _params[:guestbook_id] = Guestbook.get_default.id
@@ -127,6 +134,12 @@ class MessagesController < ApplicationController
       cookies["last_vote_" + params[:id].to_s] = {:value => "down"}
     end
     render json: {:votes => @message.votes, :state => cookies["last_vote_" + params[:id].to_s]}
+  end
+
+  def require_key
+    if !params.has_key? 'key' || !AccessKey.validate(params[:key])
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
 
   private

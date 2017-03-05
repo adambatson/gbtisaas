@@ -1,5 +1,5 @@
 class GuestbooksController < ApplicationController
-  before_action :require_login
+  before_action :require_login, :only => [:admin, :create, :update, :destroy, :set_default, :archive, :export]
   before_action :set_guestbook, only: [:show, :edit, :update, :destroy]
   layout 'admin', :only => [:admin]
 
@@ -10,11 +10,6 @@ class GuestbooksController < ApplicationController
     @open_books = Guestbook.where(archived: false)
     @archived_books = Guestbook.where(archived: true)
   end
-
-
-
-
-
 
   # GET /guestbooks
   # GET /guestbooks.json

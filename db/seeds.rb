@@ -16,3 +16,4 @@ book.messages.create([
 ]);
 
 user = User.create!(email: 'admin@example.com', password: 'admin')
+key = AccessKey.create!(label: 'Test Key', key: 'bb6a37a6de7b6fe19d6e8b12246764f3')

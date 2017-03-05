@@ -1,5 +1,5 @@
 class AccessKeysController < ApplicationController
-  before_action :require_login
+  before_action :require_login, :only => [:admin, :create, :destroy, :assign]
   layout 'admin', :only => [:admin]
   
   def admin
@@ -13,6 +13,10 @@ class AccessKeysController < ApplicationController
 
   def create
     _params = access_key_params
+    if !params.has_key? 'guestbook_id'
+      _params[:guestbook_id] = Guestbook.get_default.id
+    end
+
     @access_key = AccessKey.new(_params)
 
     respond_to do |format|
@@ -50,6 +54,6 @@ class AccessKeysController < ApplicationController
 
   private
     def access_key_params
-      params.require(:access_key).permit(:label, :guestbook_id)
+      params.require(:access_key).permit(:label, :key, :guestbook_id)
     end
 end
