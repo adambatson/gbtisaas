@@ -15,7 +15,7 @@
       <% end %>
 
       <% @guestbooks.each do |guestbook| %>
-        <a href="/<%= guestbook.id %>" class="list-group-item <% if guestbook.id == @default_book.id %>list-group-item-info<% end %>">
+        <a href="/view/<%= guestbook.id %>" class="list-group-item <% if guestbook.id == @default_book.id %>list-group-item-info<% end %>">
           <h4><%= guestbook.title %> <small><% if guestbook.archived %>Ended <%= time_tag guestbook.updated_at.to_date %><% else %>Ongoing Event<% end %></small></h4>
         </a>
       <% end %>
