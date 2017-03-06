@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(version: 20170305054412) do
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text     "content",      limit: 65535
-    t.boolean  "approved",                   default: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.boolean  "approved",                   default: true
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.integer  "guestbook_id"
     t.integer  "votes",                      default: 0
     t.integer  "votes_cast",                 default: 0
