@@ -5,6 +5,7 @@ class GuestbooksController < ApplicationController
 
   def admin
     @active = "guestbooks"
+    @title = "Guestbooks"
     @guestbook = Guestbook.new
     @error = (params.has_key? :error) ? params[:error] : nil
     @open_books = Guestbook.where(archived: false)
@@ -58,7 +59,7 @@ class GuestbooksController < ApplicationController
 
     respond_to do |format|
       if @guestbook.save
-        format.html { redirect_to(:back) }
+        format.html { redirect_back(fallback_location: '/admin/guestbooks') }
         format.json { render :show, status: :created, location: @guestbook }
       else
         format.html { redirect_to action: :admin, error: @guestbook.errors.full_messages.first }
@@ -72,10 +73,10 @@ class GuestbooksController < ApplicationController
   def update
     respond_to do |format|
       if @guestbook.update(guestbook_params)
-        format.html { redirect_to(:back) }
+        format.html { redirect_back(fallback_location: '/admin/guestbooks') }
         format.json { render :show, status: :ok, location: @guestbook }
       else
-        format.html { redirect_to(:back) }
+        format.html { redirect_back(fallback_location: '/admin/guestbooks') }
         format.json { render json: @guestbook.errors, status: :unprocessable_entity }
       end
     end
@@ -86,7 +87,7 @@ class GuestbooksController < ApplicationController
   def destroy
     @guestbook.destroy
     respond_to do |format|
-      format.html { redirect_to(:back) }
+      format.html { redirect_back(fallback_location: '/admin/guestbooks') }
       format.json { head :no_content }
     end
   end
