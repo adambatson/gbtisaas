@@ -119,6 +119,7 @@ class MessagesController < ApplicationController
     else 
       #Simple upvote
       @message.cast_vote true
+      @message.cast_vote true
       cookies["last_vote_" + params[:id].to_s] = {:value => "up"}
     end
     render json: {:votes => @message.votes, :state => cookies["last_vote_" + params[:id].to_s]}
@@ -136,7 +137,8 @@ class MessagesController < ApplicationController
       cookies["last_vote_" + params[:id].to_s] = {:value => ""}
     else 
       #Simple downvote
-      @message.cast_vote true
+      @message.cast_vote false
+      @message.cast_vote false
       cookies["last_vote_" + params[:id].to_s] = {:value => "down"}
     end
     render json: {:votes => @message.votes, :state => cookies["last_vote_" + params[:id].to_s]}
