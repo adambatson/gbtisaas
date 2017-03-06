@@ -34,17 +34,18 @@ class Guestbook < ApplicationRecord
 
   def sorted_messages(sort_by)
     messages = []
+    query = Message.where(guestbook_id: self.id).where(approved: true)
     case sort_by
     when :recent
-      messages = Message.where(guestbook_id: self.id).order('created_at DESC')
+      messages = query.order('created_at DESC')
     when :votes
-      messages = Message.where(guestbook_id: self.id).order('votes DESC')
+      messages = query.order('votes DESC')
     when :alphabet
-      messages = Message.where(guestbook_id: self.id).order('content ASC')
+      messages = query.order('content ASC')
     when :controversial
-      messages = Message.where(guestbook_id: self.id).order('(votes_cast - votes) DESC')
+      messages = query.order('(votes_cast - votes) DESC')
     else
-      messages = Message.where(guestbook_id: self.id)
+      messages = query
     end
 
     return messages

@@ -1,5 +1,9 @@
 function defaultBook(id) {
-	$.get("/guestbooks/"+id+"/set_default", function() {});
+	window.location = "/guestbooks/"+id+"/set_default";
+}
+
+function bookVisibility(id) {
+	window.location = "/guestbooks/"+id+"/toggle_visibility";
 }
 
 function setbook(select, key_id) {
