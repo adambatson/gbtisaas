@@ -1,7 +1,6 @@
 class MessagesController < ApplicationController
-  before_action :require_login, :only => [:admin, :update, :destroy, :unapprove, :approve]
-  before_action :require_key, :only => [:index, :show]
-  skip_before_filter :verify_authenticity_token
+  before_action :verify_auth, :only => [:admin, :update, :destroy, :unapprove, :approve, :create, :index, :show]
+  skip_before_action :verify_authenticity_token
   before_action :set_message, only: [:show, :edit, :update, :destroy, :unapprove, :approve, :upvote, :downvote]
   layout 'admin', :only => [:admin]
 
@@ -36,18 +35,13 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
-    if request.format.json?
-      require_key
-      if params[:guestbook_id] == nil
-        params[:guestbook_id] = AccessKey.where(key: params[:key]).first.guestbook_id
-      end
-    else
-      require_login
-    end
 
     _params = message_params
-    if _params[:guestbook_id] == nil
-      _params[:guestbook_id] = Guestbook.get_default.id
+    if params.has_key? :key and !_params.has_key? :guestbook_id
+      key = AccessKey.where(key: params[:key]).first
+      if key != nil
+        _params[:guestbook_id] = key.guestbook_id
+      end
     end
 
     # Auto approve, if passes filter
@@ -61,7 +55,7 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       if @message.save
-        format.html { redirect_to(:back) }
+        format.html { redirect_back(fallback_location: '/admin/signatures') }
         format.json { render :show, status: :created, location: @message }
       else
         format.html { redirect_to(:back, error: @message.errors.full_messages.first) }
@@ -90,7 +84,7 @@ class MessagesController < ApplicationController
     @message.destroy
     respond_to do |format|
       params[:id] = @message.guestbook_id
-      format.html { redirect_to(:back) }
+      format.html { redirect_back(fallback_location: '/admin/signatures') }
       format.json { head :no_content }
     end
   end
@@ -99,7 +93,7 @@ class MessagesController < ApplicationController
     @message.approved = false
     @message.save
     respond_to do |format|
-      format.html { redirect_to(:back) }
+      format.html { redirect_back(fallback_location: '/admin/signatures') }
     end
   end
 
@@ -107,7 +101,7 @@ class MessagesController < ApplicationController
     @message.approved = true
     @message.save
     respond_to do |format|
-      format.html { redirect_to(:back) }
+      format.html { redirect_back(fallback_location: '/admin/signatures') }
     end
   end
 
@@ -147,9 +141,17 @@ class MessagesController < ApplicationController
     render json: {:votes => @message.votes, :state => cookies["last_vote_" + params[:id].to_s]}
   end
 
+  def verify_auth    
+    if request.format.json?
+      require_key
+    else
+      require_login
+    end
+  end
+
   def require_key
     if !params.has_key? 'key' || !AccessKey.validate(params[:key])
-      raise ActionController::RoutingError.new('Not Found')
+      head(403)
     end
   end
 

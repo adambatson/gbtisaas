@@ -5,3 +5,11 @@ function defaultBook(id) {
 function setbook(select, key_id) {
 	window.location = '/access_keys/'+key_id+'/assign?guestbook_id='+select.value;
 }
+
+function toggleProfanity() {
+	$('#profanity').prop('disabled', !$('#autoapprove').prop('checked'));
+}
+
+$(function() {
+	toggleProfanity();
+});

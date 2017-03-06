@@ -20,9 +20,13 @@
   <div class="panel-body">
     <h4>Guestbook Settings</h4>
     <%= form_for(@guestbook) do |f| %>
+      <!-- Because checkboxes are not sent if unchecked -->
+      <input type="hidden" name="guestbook[auto_approve]" value="false" />
+      <input type="hidden" name="guestbook[filter_profanity]" value="false" />
+
       <div class="checkbox">
         <label>
-          <input type="checkbox" id="messages" onclick="messages_toggle(this)" name="guestbook[auto_approve]" <% if @guestbook.auto_approve %>checked<% end %>> Auto-approve messages
+          <input onchange="toggleProfanity()" type="checkbox" id="autoapprove" name="guestbook[auto_approve]" <% if @guestbook.auto_approve %>checked<% end %>> Auto-approve messages
         </label>
       </div>
 

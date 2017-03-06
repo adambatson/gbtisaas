@@ -21,7 +21,7 @@ class AccessKeysController < ApplicationController
 
     respond_to do |format|
       if @access_key.save
-        format.html { redirect_to(:back) }
+        format.html { redirect_back(fallback_location: '/admin/access') }
       else
         format.html { redirect_to(:back, error: @access_key.errors.full_messages.first) }
       end
@@ -32,7 +32,7 @@ class AccessKeysController < ApplicationController
     access_key = AccessKey.find(params[:id])
     access_key.destroy
     respond_to do |format|
-      format.html { redirect_to(:back) }
+      format.html { redirect_back(fallback_location: '/admin/access') }
       format.json { head :no_content }
     end
   end
@@ -48,7 +48,7 @@ class AccessKeysController < ApplicationController
     access_key.save
 
     respond_to do |format|
-      format.html { redirect_to(:back) }
+      format.html { redirect_back(fallback_location: '/admin/access') }
     end
   end
 

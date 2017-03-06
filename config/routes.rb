@@ -37,8 +37,6 @@ Rails.application.routes.draw do
   post 'users/_create', to: 'users#_create'
   delete 'users/:id/_destroy', to: 'users#_destroy'
 
-  get 'about', to: 'home#about'
-
 
   get 'admin', to: 'guestbooks#admin'
   get 'admin/guestbooks', to: 'guestbooks#admin'
@@ -52,4 +50,5 @@ Rails.application.routes.draw do
 
   root 'home#index'
   get '/view/:id', to: 'home#index'
+  get 'about', to: 'home#about'
 end

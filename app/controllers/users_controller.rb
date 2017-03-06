@@ -15,7 +15,7 @@ class UsersController < Clearance::UsersController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to(:back) }
+        format.html { redirect_back(fallback_location: '/admin/accounts') }
       else
         format.html { redirect_to action: :admin, error: @user.errors.full_messages.first }
       end
@@ -26,7 +26,7 @@ class UsersController < Clearance::UsersController
     user = User.find(params[:id])
     user.destroy
     respond_to do |format|
-      format.html { redirect_to(:back) }
+      format.html { redirect_back(fallback_location: '/admin/accounts') }
     end
   end
 
