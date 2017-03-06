@@ -2,6 +2,7 @@
 <html>
   <head>
     <title><%= @title %> - Administation</title>
+    <link rel="icon" type="image/png" href="<%= image_url('favicon.png') %>" />
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -19,7 +20,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">GBTIS</a>
+          <a class="navbar-brand" href="/"><img src="<%= image_url('favicon.png') %>" class="navbar-favicon"  alt="GBTIS" title="Gesture-Based Text Input System Administation" /></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
