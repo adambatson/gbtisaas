@@ -38,8 +38,8 @@ class MessagesController < ApplicationController
   def create
     if request.format.json?
       require_key
-      if _params[:guestbook_id] == nil
-        _params[:guestbook_id] = AccessKey.where(params[:key]).guestbook_id
+      if params[:guestbook_id] == nil
+        params[:guestbook_id] = AccessKey.where(key: params[:key]).first.guestbook_id
       end
     else
       require_login
