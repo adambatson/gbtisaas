@@ -4,6 +4,7 @@ class AccessKeysController < ApplicationController
   
   def admin
     @active = "access"
+    @title = "Access Keys"
     @access_key = AccessKey.new
     @error = (params.has_key? :error) ? params[:error] : nil
     @guestbooks = Guestbook.where(archived: false).where(is_default: false)

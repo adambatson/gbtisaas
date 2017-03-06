@@ -6,6 +6,7 @@ class MessagesController < ApplicationController
 
   def admin
     @active = "signatures"
+    @title = "Signatures"
     @message = Message.new
     @guestbook = (params.has_key? :book_id) ? Guestbook.find(params[:book_id]) : Guestbook.get_default
     @error = (params.has_key? :error) ? params[:error] : nil

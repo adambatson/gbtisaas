@@ -4,6 +4,7 @@ class UsersController < Clearance::UsersController
 
   def admin
     @active = "accounts"
+    @title = "Accounts"
     @user = User.new
     @users = User.all
     @error = (params.has_key? :error) ? params[:error] : nil

@@ -5,6 +5,7 @@ class GuestbooksController < ApplicationController
 
   def admin
     @active = "guestbooks"
+    @title = "Guestbooks"
     @guestbook = Guestbook.new
     @error = (params.has_key? :error) ? params[:error] : nil
     @open_books = Guestbook.where(archived: false)
