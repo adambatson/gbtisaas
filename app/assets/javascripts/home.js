@@ -3,20 +3,22 @@
 
 $(function() {
 	$('#filter').val('');
-	$('#filter').on('change keyup paste', function() {
-		var filter = $('#filter').val().toLowerCase();
-		$('.message-content').each(function() {
-			var value = $(this).html().toLowerCase();
-			var parent = $(this).parent();
-
-			if (value.includes(filter)) {
-				parent.fadeIn();
-			} else {
-				parent.fadeOut();
-			}
-		});
-	});
+	$('#filter').on('change keyup paste', filter_names);
 });
+
+function filter_names() {
+	var filter = $('#filter').val().toLowerCase();
+	$('.message-content').each(function() {
+		var value = $(this).html().toLowerCase();
+		var parent = $(this).parent();
+
+		if (value.includes(filter)) {
+			parent.fadeIn();
+		} else {
+			parent.fadeOut();
+		}
+	});
+}
 
 function vote(id, action, upclass, dnclass) {
 	var votes = $('#votes'+id);
