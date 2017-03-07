@@ -20,12 +20,17 @@ class MessagesController < ApplicationController
     if params.has_key? :key and !_params.has_key? :guestbook_id
       key = AccessKey.where(key: params[:key]).first
       if key != nil
-        _params[:guestbook_id] = key.guestbook_id
+        _params[:guestbook_id] = key.guestbook != nil ? key.guestbook.id : Guestbook.get_default.id
       end
     end
 
-    # Auto approve, if passes filter
+    # Insurance
+    if _params[:guestbook_id] == nil
+      _params[:guestbook_id] = Guestbook.get_default.id
+    end
     guestbook = Guestbook.find(_params[:guestbook_id])
+
+    # Auto approve, if passes filter
     _params[:approved] = guestbook.auto_approve
     if guestbook.filter_profanity && Obscenity.profane?(_params[:content])
       _params[:approved] = false
