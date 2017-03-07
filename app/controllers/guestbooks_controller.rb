@@ -1,6 +1,7 @@
 class GuestbooksController < ApplicationController
   before_action :require_login, :only => [:admin, :create, :update, :destroy, :set_default, :toggle_visibility, :archive, :export]
   before_action :set_guestbook, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authenticity_token
   layout 'admin', :only => [:admin]
 
   def admin
