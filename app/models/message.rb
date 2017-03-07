@@ -24,4 +24,10 @@ class Message < ApplicationRecord
     self.votes_cast -= 1
   end
 
+  def as_json options={}
+    {
+      "content": content
+    }
+  end
+
 end

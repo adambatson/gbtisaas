@@ -38,7 +38,15 @@ class GuestbooksController < ApplicationController
     #@messages = Message.where('guestbook_id = ' + params[:id])
     respond_to do |format|
       format.html { redirect_to "/view/#{@guestbook.id}" }
-      format.json {render json: @guestbook.approved_messages}
+      format.json {
+        if params.has_key? :key
+          key = AccessKey.where(key: params[:key]).first
+          if key != nil
+            render json: key.guestbook.approved_messages.content
+            return
+          end
+        end
+        render json: Guestbook.get_default.approved_messages.content}
     end
   end
 
