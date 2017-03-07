@@ -1,5 +1,5 @@
 class GuestbooksController < ApplicationController
-  before_action :require_login, :only => [:admin, :create, :update, :destroy, :set_default, :archive, :export]
+  before_action :require_login, :only => [:admin, :create, :update, :destroy, :set_default, :toggle_visibility, :archive, :export]
   before_action :set_guestbook, only: [:show, :edit, :update, :destroy]
   layout 'admin', :only => [:admin]
 
@@ -98,7 +98,22 @@ class GuestbooksController < ApplicationController
     end
     default = Guestbook.find(params[:id])
     default.toggle_default
-    render json: {:guestbook => default}
+
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: '/admin/guestbooks') }
+      format.json { render json: {:guestbook => default} }
+    end
+  end
+
+  def toggle_visibility
+    book = Guestbook.find(params[:id])
+    book.visible = !book.visible
+    book.save
+
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: '/admin/guestbooks') }
+      format.json { render json: {:guestbook => book} }
+    end
   end
 
   def archive

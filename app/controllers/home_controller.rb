@@ -7,7 +7,10 @@ class HomeController < ApplicationController
 
 		@sort_by = params.has_key?(:sort_by) ? params[:sort_by].to_sym : :recent
 		@messages = @current_book.sorted_messages(@sort_by)
-  	@guestbooks = Guestbook.all.where.not(id: @current_book.id).where.not(id: @default_book.id)
+  	@guestbooks = Guestbook.all.
+      where.not(id: @current_book.id).
+      where.not(id: @default_book.id).
+      where(visible: true)
     @title = "#{@current_book.title} - Guestbook"
   end
 

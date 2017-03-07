@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       get :archive
       get :export
       get :set_default
+      get :toggle_visibility
     end
   end
 

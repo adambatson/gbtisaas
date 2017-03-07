@@ -29,7 +29,7 @@
   <div class="table-responsive">
     <table class="table table-tool table-striped" style="border-collapse: collapse;">
       <tr>
-        <th>Default</th>
+        <th>Settings</th>
         <th>Name</th>
         <th>Opened</th>
         <th>Archived</th>
@@ -38,7 +38,16 @@
 
       <% @open_books.each do |guestbook| %>
       <tr>
-        <td><input type="radio" name="default" <% if guestbook.is_default %> checked="" <% end %> onclick="defaultBook(<%= guestbook.id %>)" /></td>
+        <td class="text-left">
+          <div class="btn-group btn-group-xs" role="group" aria-label="actions">
+            <button type="button" class="btn btn-default" onclick="defaultBook(<%= guestbook.id %>)">
+              <span class="glyphicon glyphicon-pushpin" <% if !guestbook.is_default %>style="visibility: hidden"<% end %>></span>
+            </button>
+            <button type="button" class="btn btn-default" onclick="bookVisibility(<%= guestbook.id %>)">
+              <span class="glyphicon glyphicon-eye-<% if guestbook.visible %>open<% else %>close<% end %>"></span>
+            </button>
+          </div>
+        </td>
         <td><%= guestbook.title %></td>
         <td><%= time_tag guestbook.created_at.to_date %></td>
         <td class=" text-muted">-</td>
@@ -58,7 +67,13 @@
 
       <% @archived_books.each do |guestbook| %>
       <tr>
-        <td></td>
+        <td>
+          <div class="btn-group btn-group-xs" role="group" aria-label="actions">
+            <button type="button" class="btn btn-default" onclick="bookVisibility(<%= guestbook.id %>)">
+              <span class="glyphicon glyphicon-eye-<% if guestbook.visible %>open<% else %>close<% end %>"></span>
+            </button>
+          </div>
+        </td>
         <td><%= guestbook.title %></td>
         <td><%= time_tag guestbook.created_at.to_date %></td>
         <td><%= time_tag guestbook.updated_at.to_date %></td>
