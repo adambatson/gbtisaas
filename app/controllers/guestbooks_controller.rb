@@ -15,7 +15,19 @@ class GuestbooksController < ApplicationController
   # GET /guestbooks
   # GET /guestbooks.json
   def index
-    @guestbooks = Guestbook.all
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.json {
+        if params.has_key? :key
+          key = AccessKey.where(key: params[:key]).first
+          if key != nil
+            render json: key.guestbook.approved_messages
+            return
+          end
+        end
+        render json: Guestbook.get_default.approved_messages
+      }
+    end
   end
 
   # GET /guestbooks/1
@@ -24,32 +36,9 @@ class GuestbooksController < ApplicationController
     #abort @guestbook.messages.inspect
     #@messages = Message.where('guestbook_id = ' + params[:id])
     respond_to do |format|
-      format.html {
-        case sort_params[:sort_by]
-        when 'recent'
-          @messages = Message.where('guestbook_id = ' + params[:id]).order('created_at DESC')
-        when 'votes'
-          @messages = Message.where('guestbook_id = ' + params[:id]).order('votes DESC')
-        when 'alphabet'
-          @messages = Message.where('guestbook_id = ' + params[:id]).order('content ASC')
-        when 'controversial'
-          @messages = Message.where('guestbook_id = ' + params[:id]).order('(votes_cast - votes) DESC')
-        else
-          @messages = Message.where('guestbook_id = ' + params[:id])
-        end
-      }
-      format.json {render json: @guestbook}
+      format.html { redirect_to "/view/#{@guestbook.id}" }
+      format.json {render json: @guestbook.approved_messages}
     end
-    
-  end
-
-  # GET /guestbooks/new
-  def new
-    @guestbook = Guestbook.new
-  end
-
-  # GET /guestbooks/1/edit
-  def edit
   end
 
   # POST /guestbooks
