@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
-  before_action :verify_auth, :only => [:admin, :update, :destroy, :unapprove, :approve, :create, :index, :show]
+  before_action :verify_auth, :only => [:admin, :update, :destroy, :unapprove, :approve, :create]
   skip_before_action :verify_authenticity_token
-  before_action :set_message, only: [:show, :edit, :update, :destroy, :unapprove, :approve, :upvote, :downvote]
+  before_action :set_message, only: [:update, :destroy, :unapprove, :approve, :upvote, :downvote]
   layout 'admin', :only => [:admin]
 
   def admin
@@ -12,31 +12,10 @@ class MessagesController < ApplicationController
     @error = (params.has_key? :error) ? params[:error] : nil
     @guestbooks = Guestbook.where(archived: false)
   end
-
-  # GET /messages
-  # GET /messages.json
-  def index
-    @messages = Message.all
-  end
-
-  # GET /messages/1
-  # GET /messages/1.json
-  def show
-  end
-
-  # GET /messages/new
-  def new
-    @message = Message.new
-  end
-
-  # GET /messages/1/edit
-  def edit
-  end
-
+  
   # POST /messages
   # POST /messages.json
   def create
-
     _params = message_params
     if params.has_key? :key and !_params.has_key? :guestbook_id
       key = AccessKey.where(key: params[:key]).first
